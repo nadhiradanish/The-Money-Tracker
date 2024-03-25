@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Money Tracker</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Money Tracker</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a id="hello-nav" class="nav-link" href="#">Hello !</a>
+      </li>
+      <li class="nav-item">
+        <a id="main-nav" class="nav-link" href="#">Main</a>
+      </li>
+      <li class="nav-item">
+        <a id="income-nav" class="nav-link" href="#">Income</a>
+      </li>
+      <li class="nav-item">
+        <a id="outcome-nav" class="nav-link" href="#">Outcome</a>
+      </li>
+      <li class="nav-item">
+        <a id="about-us-nav" class="nav-link" href="#">About Us</a>
+      </li>
+      <li class="nav-item">
+        <a id="logout-nav" class="nav-link" href="#">Logout</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Include Login Page -->
+<div id="login-page">
+  <!-- Login form here -->
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card mt-5">
+          <div class="card-header">Login</div>
+          <div class="card-body">
+            <form id="login-form">
+              <div class="form-group">
+                <label for="username">Enter Your Name:</label>
+                <input type="text" class="form-control" id="username" placeholder="Enter Name">
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Include MainPage, IncomePage, OutcomePage here -->
+<!-- Include Income Page content here -->
+<div id="income-page" style="display: none;">
+  <!-- Form for adding income -->
+  <div class="container mt-5">
+    <h3>Add Income</h3>
+    <form id="income-form">
+      <div class="form-group">
+        <label for="income-name">Transaction Name:</label>
+        <input type="text" class="form-control" id="income-name" placeholder="Enter Transaction Name">
+      </div>
+      <div class="form-group">
+        <label for="income-amount">Transaction Amount:</label>
+        <input type="number" class="form-control" id="income-amount" placeholder="Enter Transaction Amount">
+      </div>
+      <div class="form-group">
+        <label for="income-category">Transaction Category:</label>
+        <select class="form-control" id="income-category">
+          <option value="food">Food</option>
+          <option value="entertainment">Entertainment</option>
+          <option value="education">Education</option>
+          <option value="shopping">Shopping</option>
+          <option value="others">Others</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+<!-- Include Outcome Page content here -->
+<div id="outcome-page" style="display: none;">
+  <!-- Form for adding outcome -->
+  <div class="container mt-5">
+    <h3>Add Outcome</h3>
+    <form id="outcome-form">
+      <div class="form-group">
+        <label for="outcome-name">Transaction Name:</label>
+        <input type="text" class="form-control" id="outcome-name" placeholder="Enter Transaction Name">
+      </div>
+      <div class="form-group">
+        <label for="outcome-amount">Transaction Amount:</label>
+        <input type="number" class="form-control" id="outcome-amount" placeholder="Enter Transaction Amount">
+      </div>
+      <div class="form-group">
+        <label for="outcome-category">Transaction Category:</label>
+        <select class="form-control" id="outcome-category">
+          <option value="food">Food</option>
+          <option value="entertainment">Entertainment</option>
+          <option value="education">Education</option>
+          <option value="shopping">Shopping</option>
+          <option value="others">Others</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+
+<!-- Include Main Page content here -->
+<div id="main-page" style="display: none;">
+  <!-- Main Content -->
+  <div class="container mt-5">
+    <h3>Current Balance: <span id="balance">$0</span></h3>
+    <ul class="list-group mt-3" id="transaction-list">
+      <!-- Transaction list will be displayed here -->
+    </ul>
+  </div>
+</div>
+
+<!-- Include About Us Page content here -->
+<div id="about-us-page" style="display: none;">
+  <!-- About Us Content -->
+  <div class="container mt-5">
+    <h3>About Us</h3>
+    <p>Team Members:</p>
+    <ul>
+      <li>Nadhirah Danish Ammara</li>
+      <li>Naufal Averous Riziq</li>
+      <li>Mohammad Ubaidurrachman</li>
+    </ul>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+// JavaScript logic goes here
+
+// Simpan nama pengguna setelah login
+let username = '';
+
+// Ambil elemen yang dibutuhkan
+const loginPage = document.getElementById('login-page');
+const mainPage = document.getElementById('main-page');
+const aboutUsPage = document.getElementById('about-us-page');
+const loginForm = document.getElementById('login-form');
+const aboutUsNav = document.getElementById('about-us-nav');
+const logoutNav = document.getElementById('logout-nav');
+
+loginForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  // Ambil nama dari input
+  username = document.getElementById('username').value;
+  
+  // Simpan nama pengguna di local storage
+  localStorage.setItem('username', username);
+  
+  // Hide login page and show main page
+  loginPage.style.display = 'none';
+  mainPage.style.display = 'block';
+  
+  // Load main page content
+  loadMainPage();
+
+  // Update teks pada navbar setelah mendapatkan nama pengguna
+  updateNavbarText();
+});
+
+// Function untuk update teks pada navbar dengan nama pengguna
+function updateNavbarText() {
+  const helloNav = document.getElementById('hello-nav');
+  const savedUsername = localStorage.getItem('username');
+  helloNav.innerHTML = 'Hello, ' + savedUsername + '!';
+}
+
+// Function untuk memuat konten halaman utama
+function loadMainPage() {
+  // Load saldo dari local storage
+  const savedBalance = localStorage.getItem('balance');
+  if (savedBalance) {
+    document.getElementById('balance').textContent = '$' + savedBalance;
+  }
+  
+  // Load transaksi dari local storage
+  const savedTransactions = JSON.parse(localStorage.getItem('transactions'));
+  if (savedTransactions) {
+    savedTransactions.forEach(transaction => {
+      addTransaction(transaction.name, transaction.amount, transaction.type);
+    });
+  }
+}
+
+// Function untuk menampilkan About Us Page
+function showAboutUsPage() {
+  mainPage.style.display = 'none';
+  aboutUsPage.style.display = 'block';
+}
+
+// Function untuk menyembunyikan About Us Page
+function hideAboutUsPage() {
+  aboutUsPage.style.display = 'none';
+}
+
+// Event listener untuk logout
+logoutNav.addEventListener('click', function(event) {
+  event.preventDefault();
+  localStorage.clear();
+  window.location.reload(); // Refresh halaman untuk kembali ke form login
+});
+
+// JavaScript logic for Main Page
+
+// Function untuk menambah transaksi ke daftar
+function addTransaction(name, amount, type) {
+  const transactionList = document.getElementById('transaction-list');
+  const listItem = document.createElement('li');
+  listItem.classList.add('list-group-item');
+  if (type === 'income') {
+    listItem.classList.add('list-group-item-success');
+  } else if (type === 'outcome') {
+    listItem.classList.add('list-group-item-danger');
+  }
+  listItem.innerHTML = `
+    ${name}
+    <span class="badge badge-pill">$${amount}</span>
+  `;
+  transactionList.appendChild(listItem);
+}
+// Function untuk mengupdate saldo dan menampilkan notifikasi transaksi
+function updateBalance(amount, type) {
+  let balance = parseFloat(localStorage.getItem('balance')) || 0;
+  if (type === 'income') {
+    balance += parseFloat(amount);
+  } else if (type === 'outcome') {
+    balance -= parseFloat(amount);
+  }
+  localStorage.setItem('balance', balance.toFixed(2));
+
+  if (document.getElementById('transaction-notification')) {
+    document.getElementById('transaction-notification').remove();
+  }
+
+  showTransactionNotification(balance);
+}
+
+// Function untuk menampilkan notifikasi transaksi
+function showTransactionNotification(balance) {
+  const notificationContainer = document.createElement('div');
+  notificationContainer.setAttribute('id', 'transaction-notification');
+  notificationContainer.classList.add('alert', 'alert-success', 'mt-3');
+  notificationContainer.textContent = 'Transaction successful!';
+
+  mainPage.appendChild(notificationContainer);
+
+  // Refresh page setelah 3 detik
+  setTimeout(() => {
+    mainPage.removeChild(notificationContainer);
+    window.location.reload();
+  }, 3000);
+}
+
+// JavaScript logic for Income and Outcome Page
+
+// Ambil elemen yang dibutuhkan
+const incomePage = document.getElementById('income-page');
+const outcomePage = document.getElementById('outcome-page');
+const incomeForm = document.getElementById('income-form');
+const outcomeForm = document.getElementById('outcome-form');
+
+// Event listener untuk submit form income
+incomeForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  // Ambil nilai dari form
+  const name = document.getElementById('income-name').value;
+  const amount = document.getElementById('income-amount').value;
+  const category = document.getElementById('income-category').value;
+  
+  // Validasi input
+  if (name.trim() === '' || amount.trim() === '' || category.trim() === '') {
+    alert('Please fill in all transaction fields!');
+    return;
+  }
+  
+  // Tambahkan transaksi ke daftar transaksi
+  addTransaction(name, amount, 'income');
+  
+  // Simpan transaksi ke local storage
+  saveTransaction(name, amount, 'income');
+
+  // Update saldo dan tampilkan notifikasi
+  updateBalance(amount, 'income');
+  
+  // Reset form
+  incomeForm.reset();
+});
+
+// Event listener untuk submit form outcome
+outcomeForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+  
+  // Ambil nilai dari form
+  const name = document.getElementById('outcome-name').value;
+  const amount = document.getElementById('outcome-amount').value;
+  const category = document.getElementById('outcome-category').value;
+  
+  // Validasi input
+  if (name.trim() === '' || amount.trim() === '' || category.trim() === '') {
+    alert('Please fill in all transaction fields!');
+    return;
+  }
+  
+  // Tambahkan transaksi ke daftar transaksi
+  addTransaction(name, amount, 'outcome');
+  
+  // Simpan transaksi ke local storage
+  saveTransaction(name, amount, 'outcome');
+
+  // Update saldo dan tampilkan notifikasi
+  updateBalance(amount, 'outcome');
+  
+  // Reset form
+  outcomeForm.reset();
+});
+
+// Function untuk menyimpan transaksi ke local storage
+function saveTransaction(name, amount, type) {
+  const transaction = {
+    name: name,
+    amount: amount,
+    type: type
+  };
+  
+  let transactions = [];
+  const savedTransactions = localStorage.getItem('transactions');
+  if (savedTransactions) {
+    transactions = JSON.parse(savedTransactions);
+  }
+  transactions.push(transaction);
+  localStorage.setItem('transactions', JSON.stringify(transactions));
+}
+
+// JavaScript logic for Navbar
+
+// Ambil elemen-elemen yang dibutuhkan dari navbar
+const mainNav = document.getElementById('main-nav');
+const incomeNav = document.getElementById('income-nav');
+const outcomeNav = document.getElementById('outcome-nav');
+
+// Event listener untuk menuju halaman Main Page saat tombol Main diklik
+mainNav.addEventListener('click', function(event) {
+  event.preventDefault();
+  showMainPage();
+});
+
+// Event listener untuk menuju halaman Income Page saat tombol Income diklik
+incomeNav.addEventListener('click', function(event) {
+  event.preventDefault();
+  showIncomePage();
+});
+
+// Event listener untuk menuju halaman Outcome Page saat tombol Outcome diklik
+outcomeNav.addEventListener('click', function(event) {
+  event.preventDefault();
+  showOutcomePage();
+});
+
+// Event listener untuk menuju halaman About Us saat tombol About Us diklik
+aboutUsNav.addEventListener('click', function(event) {
+  event.preventDefault();
+  showAboutUsPage();
+});
+
+// Function untuk menampilkan Main Page
+function showMainPage() {
+  mainPage.style.display = 'block';
+  incomePage.style.display = 'none';
+  outcomePage.style.display = 'none';
+  hideAboutUsPage();
+}
+
+// Function untuk menampilkan Income Page
+function showIncomePage() {
+  mainPage.style.display = 'none';
+  incomePage.style.display = 'block';
+  outcomePage.style.display = 'none';
+  hideAboutUsPage();
+}
+
+// Function untuk menampilkan Outcome Page
+function showOutcomePage() {
+  mainPage.style.display = 'none';
+  incomePage.style.display = 'none';
+  outcomePage.style.display = 'block';
+  hideAboutUsPage();
+}
+
+// Load Main Page saat halaman dimuat
+window.addEventListener('load', function() {
+  const savedUsername = localStorage.getItem('username');
+  if (savedUsername) {
+    username = savedUsername;
+    updateNavbarText();
+    loginPage.style.display = 'none';
+    mainPage.style.display = 'block';
+    loadMainPage();
+  }
+});
+
+
+
+</script>
+</body>
+</html>
+
